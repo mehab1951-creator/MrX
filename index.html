@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUREO Solver - منصة واحدة. كل الكورسات.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0b0e17;
+            font-family: 'Tajawal', sans-serif;
+            color: #f1f5f9;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .terminal-scroll::-webkit-scrollbar { width: 5px; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col justify-between max-w-xl mx-auto space-y-6">
+
+    <!-- Top Bar -->
+    <header class="flex justify-between items-center py-2">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/40">
+                Q
+            </div>
+            <div class="flex items-center gap-1.5 font-bold tracking-wider text-sm">
+                <span class="text-white">QUREO</span>
+                <span class="text-indigo-400 text-xs">SOLVER</span>
+            </div>
+        </div>
+        <a href="https://t.me/" target="_blank" class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-full text-xs text-slate-300 transition">
+            <svg class="w-3.5 h-3.5 fill-current text-sky-400" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.88.03-.24.37-.49 1.02-.74 4-1.74 6.67-2.89 8.02-3.46 3.82-1.6 4.62-1.88 5.14-1.89.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.21-.04.35z"/></svg>
+            <span>Telegram</span>
+        </a>
+    </header>
+
+    <!-- Hero Title -->
+    <section class="text-center space-y-2 pt-2">
+        <p class="text-xs font-semibold text-indigo-400 tracking-wide">— منصة واحدة. كل الكورسات.</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+            اختارها. حلها.<br>وتقدّم للأمام.
+        </h1>
+        <p class="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+            حل سريع ودقيق للكورسات مع نشاط مباشر خاص بكل جلسة. من غير زحمة — بس الكورسات المناسبة لسنتك.
+        </p>
+
+        <!-- Feature Pills -->
+        <div class="flex justify-center gap-2 pt-2 text-[11px] text-slate-300">
+            <span class="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">30 حل نشط</span>
+            <span class="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">طابور ذكي</span>
+            <span class="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">تقدم مباشر</span>
+        </div>
+    </section>
+
+    <!-- SECTION 1: Step-by-Step Wizard Form -->
+    <div id="wizardCard" class="bg-[#101424] border border-slate-800/80 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+        
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="text-xs bg-indigo-900/60 text-indigo-400 px-2 py-0.5 rounded font-mono">01</span>
+                    <span>ابدأ حل جديد</span>
+                </h2>
+                <p class="text-[11px] text-slate-400 mt-0.5">أربع خطوات سريعة. والباقي علينا.</p>
+            </div>
+            <span id="stepIndicator" class="text-xs font-medium text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">
+                الخطوة 1 من 4
+            </span>
+        </div>
+
+        <form id="solverForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+            
+            <!-- STEP 1: Grade Selection -->
+            <div id="step1" class="step-pane space-y-2">
+                <label class="block text-xs font-medium text-slate-300">اختر الصف الدراسي</label>
+                <div class="grid grid-cols-1 gap-2">
+                    <button type="button" onclick="selectGrade('grade_1')" class="grade-btn w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        أولى بكالوريا
+                    </button>
+                    <button type="button" onclick="selectGrade('grade_2')" class="grade-btn w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        تانية بكالوريا
+                    </button>
+                    <button type="button" onclick="selectGrade('languages')" class="grade-btn w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        لغات
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Subject Selection -->
+            <div id="step2" class="step-pane hidden space-y-2">
+                <label class="block text-xs font-medium text-slate-300">اختر المادة</label>
+                <div id="subjectContainer" class="grid grid-cols-1 gap-2">
+                </div>
+            </div>
+
+            <!-- STEP 3: Student ID -->
+            <div id="step3" class="step-pane hidden space-y-2">
+                <label class="block text-xs font-medium text-slate-300">كود الطالب (ID)</label>
+                <input type="text" id="student_id" placeholder="أدخل كود الطالب الخاص بالمنصة" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                <p class="text-[10px] text-slate-500">بياناتك بتستخدم بس لإكمال الكورس اللي اخترته.</p>
+                <button type="button" onclick="goToStep(4)" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition">
+                    التالي ←
+                </button>
+            </div>
+
+            <!-- STEP 4: Password & Submit -->
+            <div id="step4" class="step-pane hidden space-y-2">
+                <label class="block text-xs font-medium text-slate-300">كلمة السر</label>
+                <input type="password" id="password" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                <p class="text-[10px] text-slate-500">بياناتك بتستخدم بس لإكمال الكورس اللي اخترته.</p>
+                <div class="flex gap-2 pt-2">
+                    <button type="submit" id="btnSubmit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-1.5">
+                        <span>ابدأ الحل</span>
+                        <span>←</span>
+                    </button>
+                    <button type="button" onclick="goToStep(3)" class="px-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 rounded-xl text-xs font-medium transition">
+                        رجوع
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- SECTION 2: Live Progress Card -->
+    <div id="progressCard" class="hidden bg-[#101424] border border-slate-800/80 rounded-2xl p-5 shadow-2xl space-y-4">
+        
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="text-xs bg-indigo-900/60 text-indigo-400 px-2 py-0.5 rounded font-mono">02</span>
+                    <span>التقدم المباشر</span>
+                </h2>
+                <p class="text-[11px] text-slate-400 mt-0.5">تحديثات من جلستك الحالية بس.</p>
+            </div>
+            <span id="badgeQueue" class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span id="badgeQueueText">دورك رقم ...</span>
+            </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+            <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl text-center">
+                <div id="statStatusBox" class="text-sm font-bold text-indigo-300">دورك رقم...</div>
+                <div class="text-[10px] text-slate-400 mt-1">حالة الحل</div>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl text-center">
+                <div id="statCurrentChapter" class="text-lg font-mono font-bold text-sky-400">-</div>
+                <div class="text-[10px] text-slate-400 mt-1">آخر فصل</div>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl text-center">
+                <div id="statCompleted" class="text-lg font-mono font-bold text-emerald-400">0</div>
+                <div class="text-[10px] text-slate-400 mt-1">عناصر مكتملة</div>
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <div class="flex justify-between items-center text-xs text-slate-400">
+                <div class="flex items-center gap-1.5 text-slate-300 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>النشاط المباشر</span>
+                </div>
+                <span id="eventCount" class="text-[10px] text-slate-500">1 أحداث</span>
+            </div>
+
+            <div id="terminal" class="terminal-scroll h-48 bg-[#090c14] border border-slate-900 rounded-xl p-3 text-xs font-mono overflow-y-auto space-y-1.5 dir-ltr text-left">
+                <div id="queueNoticeLine" class="text-indigo-300 text-right dir-rtl">انت دورك رقم: جاري التحقق...</div>
+            </div>
+        </div>
+
+        <div class="border-t border-slate-900 pt-3 flex justify-between items-center text-[11px] text-slate-500">
+            <span>جلساتك بس</span>
+            <span class="text-slate-400 font-medium">الفصول</span>
+        </div>
+        <div id="tableNotice" class="text-center text-xs text-slate-500 py-3">
+            لسه مفيش تقدم للحساب ده.
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-[11px] text-slate-600 pt-4 pb-2">
+        <div class="font-bold tracking-wider text-slate-500">QUREO SOLVER</div>
+        <p class="mt-0.5">انتظار أقل. تعلّم أكثر.</p>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        let selectedGrade = '';
+        let selectedSubject = '';
+        let activeTaskId = null;
+        let logEventsCount = 0;
+
+        function goToStep(step) {
+            currentStep = step;
+            document.querySelectorAll('.step-pane').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            document.getElementById('stepIndicator').textContent = `الخطوة ${step} من 4`;
+        }
+
+        function selectGrade(grade) {
+            selectedGrade = grade;
+            const container = document.getElementById('subjectContainer');
+            container.innerHTML = '';
+
+            if (grade === 'grade_1') {
+                container.innerHTML = `
+                    <button type="button" onclick="selectSubject('javascript')" class="w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        جافاسكريبت (JavaScript)
+                    </button>
+                `;
+            } else if (grade === 'grade_2') {
+                container.innerHTML = `
+                    <button type="button" onclick="selectSubject('financial_literacy')" class="w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        ثقافة مالية
+                    </button>
+                    <button type="button" onclick="selectSubject('javascript')" class="w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        جافاسكريبت (JavaScript)
+                    </button>
+                    <button type="button" onclick="selectSubject('python')" class="w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        بايثون (Python)
+                    </button>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button type="button" onclick="selectSubject('english_track')" class="w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        مسار لغات برمجية
+                    </button>
+                    <button type="button" onclick="selectSubject('python')" class="w-full text-right p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-sm font-semibold transition">
+                        بايثون
+                    </button>
+                `;
+            }
+            goToStep(2);
+        }
+
+        function selectSubject(sub) {
+            selectedSubject = sub;
+            goToStep(3);
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const studentId = document.getElementById('student_id').value;
+            const password = document.getElementById('password').value;
+
+            if (!studentId || !password) {
+                alert('يرجى كتابة كود الطالب وكلمة السر');
+                return;
+            }
+
+            const payload = {
+                grade: selectedGrade,
+                subject: selectedSubject,
+                student_id: studentId,
+                password: password
+            };
+
+            const res = await fetch('/api/queue/join', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            activeTaskId = data.task_id;
+
+            document.getElementById('wizardCard').classList.add('hidden');
+            document.getElementById('progressCard').classList.remove('hidden');
+
+            document.getElementById('badgeQueueText').textContent = `دورك رقم ${data.position}`;
+            document.getElementById('statStatusBox').textContent = `دورك رقم...`;
+            document.getElementById('queueNoticeLine').textContent = data.message;
+
+            connectWebSocket(activeTaskId);
+        }
+
+        function connectWebSocket(taskId) {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const ws = new WebSocket(`${protocol}//${window.location.host}/ws/${taskId}`);
+            const terminal = document.getElementById('terminal');
+
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'queue_update') {
+                    document.getElementById('badgeQueueText').textContent = `دورك رقم ${data.position}`;
+                    document.getElementById('queueNoticeLine').textContent = data.message;
+                }
+
+                if (data.type === 'status_change') {
+                    document.getElementById('statStatusBox').textContent = data.status;
+                    document.getElementById('statStatusBox').className = 'text-sm font-bold text-emerald-400 animate-pulse';
+                    document.getElementById('tableNotice').textContent = 'جاري تسجيل الدخول وحل الفصول...';
+                }
+
+                if (data.type === 'log') {
+                    appendTerminalLine(data.message, 'text-sky-300');
+                    if (data.current_chapter) {
+                        document.getElementById('statCurrentChapter').textContent = data.current_chapter;
+                    }
+                }
+
+                if (data.type === 'log_success') {
+                    appendTerminalLine(data.message, 'text-emerald-400');
+                    if (data.completed_items) {
+                        document.getElementById('statCompleted').textContent = data.completed_items;
+                    }
+                }
+
+                if (data.type === 'finished') {
+                    document.getElementById('statStatusBox').textContent = data.status;
+                    document.getElementById('statStatusBox').className = 'text-sm font-bold text-emerald-400';
+                    appendTerminalLine(data.message, 'text-indigo-400 font-bold');
+                }
+            };
+        }
+
+        function appendTerminalLine(msg, colorClass) {
+            const terminal = document.getElementById('terminal');
+            const row = document.createElement('div');
+            row.className = colorClass;
+            row.textContent = msg;
+            terminal.appendChild(row);
+            terminal.scrollTop = terminal.scrollHeight;
+
+            logEventsCount++;
+            document.getElementById('eventCount').textContent = `${logEventsCount} أحداث`;
+        }
+    </script>
+</body>
+</html>
